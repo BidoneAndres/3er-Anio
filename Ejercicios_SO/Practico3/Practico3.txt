@@ -1,0 +1,121 @@
+/*
+1) Escriba un programa que muestre en orden todos los argumentos
+pasados por linea de comando. Para ello argumente la funcion main()
+de su programa de la siguiente manera
+
+	int main(int argc, char *argv[])
+
+De esta manera "argc" contiene la cantidad de elementos de la linea
+de comando, mientras que "argv[]" es un array de char que contiene
+cada uno de los componentes.
+
+Tip: Solo debe recorrer el arreglo argv imprimiendo su contenidox|
+
+for ( i = 0; i < argc; i++ ) {
+  ... argv[i] ...
+}
+
+*/
+int main(int argc , char* argv[]){
+    
+    for(int i = 0 ; i < argc ; i++)
+        printf("%s\n", argv[i]);
+    
+    return 0;
+}
+/*2) Genere un archivo que contenga un listado extendido del contenido
+del directorio raiz (/). Escriba un programa que lea dicho archivo
+y muestre su contenido en pantalla. Para ello use las llamadas
+al sistema open(), close() y read().
+
+Tip: Para crear el archivo basta con hacer un 'ls -l' y redirigir
+su salida. 
+Recuerde que cada proceso 'nace' con entrada estandar, salida estandar
+y error estandar.
+'<' redirige entrada std
+'>' redirige salida std, igual que '1>'
+'2>' redirige error std
+
+Tip: Para su programa debe:
+a) abrir el archivo para lectura utilizando open()
+b) recorrer el archivo haciendo read() y observando su
+valor de retorno, el mismo nos indica cuando hemos llegado 
+al final del archivo.
+c) cerrar el archivo*/
+#include <unistd.h>
+#include <stdio.h>
+
+#define COUNT 64
+int main(int argc , char* argv[]){
+    
+    FILE fd;
+    
+    fd=open("PruebaEj2.txt");
+    int read;
+
+    while((read=read()))
+    close(fd);
+    return 0;
+}
+/*3) Escriba un programa que lea el directorio raiz (/) y muestre su
+contenido por pantalla. Use opendir(), readdir() y closedir().*/
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <stdio.h>
+int main( int argc, char * argv[]){
+
+    DIR *fd;
+    fd= opendir("/");
+    struct dirent *read;
+
+    while((read=readdir(fd))!=NULL){
+        printf("%s\n",read->d_name);
+    }
+    
+    closedir(fd);
+    
+    return 0;
+}
+/*4) Escriba un programa que reciba por linea de comando el nombre de
+un archivo y lo copie en un archivo con la extension ".bak". Use
+open(), close(), read() y write().
+
+Tip: Usará open() dos veces, una el leer el archivo origen y otra
+al crear y escribir en el archivo de destino. Para el segundo caso
+puede utilizar
+  fd = open("test.txt", O_RDWR|O_CREAT, 0644);
+o lo que es lo mismo
+  fd = open("test.txt", O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH );
+vea la página de manual 'man 2 open'
+
+Tip: El programa en si tiene tres partes
+  - abrir los archivos
+  - recorrer (loop) el origen y escribir en destino
+  - cerrar los archivos
+el loop termina analizando el valor retornado por read()*/
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#define MAX 256
+
+int main ( int argc , char *argv[]){
+    
+    char buffer[MAX]; 
+    int fd = open (argv[1], O_RDONLY);
+    int destino = open ("test.txt",O_RDWR|O_CREAT, 0644)
+    ssize_t n;
+    ssize_t write;
+    while((n=read(fd,buffer, MAX))>0){
+            write = write (destino , buffer , n);
+    }
+    close(fd);
+    close (destino);
+
+    return 0;
+}
