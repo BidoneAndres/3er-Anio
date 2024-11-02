@@ -1,0 +1,87 @@
+Codigo intermedio 
+
+    Lenguaje independiente del lenguaje de programacion utilizado
+y de la arquitectura de computadora a utilizar.
+    En esto no existe una respuesta unica, hay diferentes alternativas 
+depende el compilador que elijamos va a ser el codigo intermedio que se usa.
+    La mayoria usan el codigo de 3 direcciones,
+basicamente yo tengo las operaciones que son de este tipo
+
+    x = y <op> z    Tengo 3 direcciones para el codigo fuente 
+
+mov ax,bx
+add ax,bx,contextos
+    x = y 
+
+    Algunos ejemplos son los de java JVM que es el Java bytecode 
+
+    x=y
+    jmp x
+    label x
+    ifnjmp x,z
+    puxh x
+    pop x
+
+
+
+
+
+Hacemos un for
+
+for ( int i = 0 ; i < x ; i = i + 1){
+    y = z * x;
+}
+------------------------------------------
+
+i = 0
+label l0
+t0 = x < i
+ifnjmp i , l1
+y = z * x
+i = i + 1
+jmp l0
+label l1
+
+
+hacemos un while
+--------------------------
+
+while ( i<x ){
+    y = z * x;
+}
+
+i = 0
+label l0
+t0 = i < x
+ifnjmp t0, l1
+y = z * x 
+t1= i + 1
+i = 0
+jmp l0
+label l1
+
+int funcion (int a , int b ){
+    return a + b
+}
+
+<...>
+label l0 
+pop t0 
+pop b
+pop a
+t1 = b + a 
+push t1
+jmp t0
+<...>
+
+
+ x = funcion(o,b)
+
+<...>
+push 0
+push b
+push l1
+jmp l0 
+label l1
+pop x
+<...>
